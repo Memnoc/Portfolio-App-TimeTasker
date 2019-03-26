@@ -12,16 +12,14 @@ import android.view.View;
 *
 * create table tasks (_id integer primary key not null, Name text not null, Description text not null, SortOrder integer);
 CREATE TABLE tasks (_id integer primary key not null, Name text not null, Description text not null, SortOrder integer);
-sqlite> insert into tasks (Name, Description) values('TaskTimer', 'TaskTimer app creation');
-sqlite> insert into tasks (Name, Description, sortorder) values('Android N', 'Android N course', 2);
-sqlite> insert into tasks (Name, Description, sortorder) values('Java', 'Java  course', 0);
+insert into tasks (Name, Description) values('TaskTimer', 'TaskTimer app creation');
+insert into tasks (Name, Description, sortorder) values('Android N', 'Android N course', 2);
+insert into tasks (Name, Description, sortorder) values('Java', 'Java  course', 0);
 
-sqlite> SELECT Tasks;
+SELECT Tasks;
 1|TaskTimer|TaskTimer app creation|
 2|Android N|Android N course|2
 3|Java|Java  course|0
-
-
 *
 *
 * */
