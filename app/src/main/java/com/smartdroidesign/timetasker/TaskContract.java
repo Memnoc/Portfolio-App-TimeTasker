@@ -12,7 +12,7 @@ public class TaskContract {
         public static final String _ID  = BaseColumns._ID;
         public static final String TASKS_NAME = "Name";
         public static final String TASKS_DESCRIPTION = "Description";
-        public static final String SORT_ORDER = "SortOrder";
+        public static final String TASKS_SORT_ORDER = "SortOrder";
 
         private Columns() {
             // private constructor to prevent instantiation
