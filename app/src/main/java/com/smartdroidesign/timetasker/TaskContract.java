@@ -1,6 +1,11 @@
 package com.smartdroidesign.timetasker;
 
+import android.content.ContentUris;
+import android.net.Uri;
 import android.provider.BaseColumns;
+
+import static com.smartdroidesign.timetasker.AppProvider.CONTENT_AUTHORITY;
+import static com.smartdroidesign.timetasker.AppProvider.CONTENT_AUTHORITY_URI;
 
 public class TaskContract {
 
@@ -17,5 +22,26 @@ public class TaskContract {
         private Columns() {
             // private constructor to prevent instantiation
         }
+    }
+
+    /**
+     * static field external classes can use to get the URI and access the Tasks table
+     */
+    public static final Uri CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, TABLE_NAME);
+
+    static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + CONTENT_AUTHORITY + "." + TABLE_NAME;
+    static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + CONTENT_AUTHORITY + "." + TABLE_NAME;
+
+    /**
+     * Appends the given ID to the end of the path
+     * @param taskId
+     * @return
+     */
+    static Uri buildTaskUri(long taskId) {
+        return ContentUris.withAppendedId(CONTENT_URI, taskId);
+    }
+
+    static long getTaskId(Uri uri) {
+        return ContentUris.parseId(uri);
     }
 }

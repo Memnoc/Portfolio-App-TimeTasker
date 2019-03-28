@@ -80,24 +80,30 @@ public class AppProvider extends ContentProvider {
         // We build the equivalent of a WHERE query
         switch (match) {
             case TASKS:
+                // Pretty much a SELECT query statement + the name opf the table
                 queryBuilder.setTables(TaskContract.TABLE_NAME);
                 break;
             case TASKS_ID:
                 queryBuilder.setTables(TaskContract.TABLE_NAME);
-//                long taskId = TaskContract.getTaskId(uri);
-//                queryBuilder.appendWhere(TaskContract.Columns._ID + "= " + taskId);
-//                break;
+                long taskId = TaskContract.getTaskId(uri);
+                queryBuilder.appendWhere(TaskContract.Columns._ID + "= " + taskId);
+                break;
+
 //            case TIMINGS:
 //                queryBuilder.setTables(TimingsContract.TABLE_NAME);
 //                break;
+
 //            case TIMINGS_ID:
 //                queryBuilder.setTables(TimingsContract.TABLE_NAME);
 //                long timingId = TimingsContract.getTimingId(uri);
+                // Pretty much like adding a WHERE clause to the query
 //                queryBuilder.appendWhere(TimingsContract.Columns._ID + "= " + timingId);
 //                break;
+
 //            case TASKS_DURATION:
 //                queryBuilder.setTables(DurationsContract.TABLE_NAME);
 //                break;
+
 //            case TASKS_DURATION_ID:
 //                queryBuilder.setTables(DurationsContract.TABLE_NAME);
 //                long durationId = DurationsContract.getDurationId(uri);
