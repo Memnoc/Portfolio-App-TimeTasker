@@ -7,7 +7,7 @@ import android.util.Log;
 
 /**
  * Basic database class for the application.
- * Only class using this must be AppProvider (this is why is not public)
+ * Only class that should use this is {@link AppProvider}.
  */
 class AppDatabase extends SQLiteOpenHelper {
     private static final String TAG = "AppDatabase";
