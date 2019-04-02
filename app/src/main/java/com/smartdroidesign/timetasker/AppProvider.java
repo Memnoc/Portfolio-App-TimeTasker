@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 /**
@@ -15,11 +16,12 @@ import android.util.Log;
 public class AppProvider extends ContentProvider {
     private static final String TAG = "AppProvider";
 
-    // creating the helper
     private AppDatabase mOpenHelper;
 
-    // field to store the URI matcher
-    public static final UriMatcher sUriMatcher = buildUriMatcher();
+    private static final UriMatcher sUriMatcher = buildUriMatcher();
+
+    static final String CONTENT_AUTHORITY = "com.smartdroidesign.timetasker.provider";
+    public static final Uri CONTENT_AUTHORITY_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     private static final int TASKS = 100;
     private static final int TASKS_ID = 101;
@@ -27,66 +29,54 @@ public class AppProvider extends ContentProvider {
     private static final int TIMINGS = 200;
     private static final int TIMINGS_ID = 201;
 
-    /**
-     * private static final int TASK_TIMINGS = 300;
-     * private static final int TASK_TIMINGS_ID = 301;
+    /*
+      private static final int TASK_TIMINGS = 300;
+      private static final int TASK_TIMINGS_ID = 301;
      */
 
-    private static final int TASKS_DURATION = 400;
-    private static final int TASKS_DURATION_ID = 401;
-
-    // Authority = name of the provider
-    // URI = Uniform Resource Identifier
-    static final String CONTENT_AUTHORITY = "com.smartdroidesign.timetasker.provider";
-    // Public as it must be usable outside the class
-    public static final Uri CONTENT_AUTHORITY_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    private static final int TASK_DURATIONS = 400;
+    private static final int TASK_DURATIONS_ID = 401;
 
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-        // e.g. com.smartdroidesign.timetasker.provider/Tasks
+        //  eg. content://com.timbuchalka.tasktimer.provider/Tasks
         matcher.addURI(CONTENT_AUTHORITY, TaskContract.TABLE_NAME, TASKS);
-        // e.g. com.smartdroidesign.timetasker.provider/Tasks/8
+        // e.g. content://com.timbuchalka.tasktimer.provider/Tasks/8
         matcher.addURI(CONTENT_AUTHORITY, TaskContract.TABLE_NAME + "/#", TASKS_ID);
 
 //        matcher.addURI(CONTENT_AUTHORITY, TimingsContract.TABLE_NAME, TIMINGS);
 //        matcher.addURI(CONTENT_AUTHORITY, TimingsContract.TABLE_NAME + "/#", TIMINGS_ID);
 //
-//        matcher.addURI(CONTENT_AUTHORITY, DurationsContract.TABLE_NAME, TASKS_DURATION);
-//        matcher.addURI(CONTENT_AUTHORITY, DurationsContract.TABLE_NAME + "/#", TASKS_DURATION_ID);
+//        matcher.addURI(CONTENT_AUTHORITY, DurationsContract.TABLE_NAME, TASK_DURATIONS);
+//        matcher.addURI(CONTENT_AUTHORITY, DurationsContract.TABLE_NAME + "/#", TASK_DURATIONS_ID);
 
         return matcher;
     }
-
     @Override
     public boolean onCreate() {
-        // Getting an instance of the DB and storing it in mOpenHelper
         mOpenHelper = AppDatabase.getInstance(getContext());
-        return false;
+        return true;
     }
 
+    @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Log.d(TAG, "query: called with URI" + uri);
-        // Using a UriMatcher to work out what kind of Uri we have been given
+        Log.d(TAG, "query: called with URI " + uri);
         final int match = sUriMatcher.match(uri);
-        Log.d(TAG, "query: match is" + match);
-        // We can use the value of match to decide which Uri was passed into the method
-        // This gives us the knowledge of knowing which table we should be using
+        Log.d(TAG, "query: match is " + match);
 
-        // Next we use a query builder to build the query to be executed against the DB
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 
-        // We build the equivalent of a WHERE query
-        switch (match) {
+        switch(match) {
             case TASKS:
-                // Pretty much a SELECT query statement + the name opf the table
                 queryBuilder.setTables(TaskContract.TABLE_NAME);
                 break;
+
             case TASKS_ID:
                 queryBuilder.setTables(TaskContract.TABLE_NAME);
                 long taskId = TaskContract.getTaskId(uri);
-                queryBuilder.appendWhere(TaskContract.Columns._ID + "= " + taskId);
+                queryBuilder.appendWhere(TaskContract.Columns._ID + " = " + taskId);
                 break;
 
 //            case TIMINGS:
@@ -96,34 +86,35 @@ public class AppProvider extends ContentProvider {
 //            case TIMINGS_ID:
 //                queryBuilder.setTables(TimingsContract.TABLE_NAME);
 //                long timingId = TimingsContract.getTimingId(uri);
-                // Pretty much like adding a WHERE clause to the query
-//                queryBuilder.appendWhere(TimingsContract.Columns._ID + "= " + timingId);
+//                queryBuilder.appendWhere(TimingsContract.Columns._ID + " = " + timingId);
 //                break;
-
-//            case TASKS_DURATION:
+//
+//            case TASK_DURATIONS:
 //                queryBuilder.setTables(DurationsContract.TABLE_NAME);
 //                break;
 
-//            case TASKS_DURATION_ID:
+//            case TASK_DURATIONS_ID:
 //                queryBuilder.setTables(DurationsContract.TABLE_NAME);
-//                long durationId = DurationsContract.getDurationId(uri);
-//                queryBuilder.appendWhere(DurationsContract.Columns._ID + "= " + durationId);
+//                long durationId = DurationsContract.getDuration(uri);
+//                queryBuilder.appendWhere(DurationsContract.Columns._ID + " = " + durationId);
 //                break;
 
-                default:
-                    throw new IllegalArgumentException("Unknown URI: " + uri);
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+
         }
-        // Building the final query and running it against the DB
+
         SQLiteDatabase db = mOpenHelper.getReadableDatabase();
-        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
-        return null;
+        return queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
+    @Nullable
     @Override
     public String getType(Uri uri) {
         return null;
     }
 
+    @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         return null;

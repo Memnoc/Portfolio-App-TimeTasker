@@ -11,8 +11,7 @@ public class TaskContract {
 
     static final String TABLE_NAME = "Tasks";
 
-    // Inner classes to provide the constants for the DB
-    // static lets me avoid instantiating the class to access the fields
+    // Tasks fields
     public static class Columns {
         public static final String _ID = BaseColumns._ID;
         public static final String TASKS_NAME = "Name";
@@ -25,18 +24,13 @@ public class TaskContract {
     }
 
     /**
-     * static field external classes can use to get the URI and access the Tasks table
+     * The URI to access the Tasks table
      */
     public static final Uri CONTENT_URI = Uri.withAppendedPath(CONTENT_AUTHORITY_URI, TABLE_NAME);
 
     static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + CONTENT_AUTHORITY + "." + TABLE_NAME;
     static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + CONTENT_AUTHORITY + "." + TABLE_NAME;
 
-    /**
-     * Appends the given ID to the end of the path
-     * @param taskId
-     * @return
-     */
     static Uri buildTaskUri(long taskId) {
         return ContentUris.withAppendedId(CONTENT_URI, taskId);
     }
@@ -44,4 +38,5 @@ public class TaskContract {
     static long getTaskId(Uri uri) {
         return ContentUris.parseId(uri);
     }
+
 }

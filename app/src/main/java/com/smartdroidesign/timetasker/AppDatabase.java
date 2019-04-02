@@ -18,12 +18,6 @@ class AppDatabase extends SQLiteOpenHelper {
     // Implement AppDatabase as a Singleton
     private static AppDatabase instance = null;
 
-    /*
-This constructor is calling the super class one, passing context, database name and version.
-Third argument is null, it's used to provide a custom cursor, if you want to. If not, the default one will be used.
-Marked as private, as we only want a single instance of this class to exist.
-Should be better to implement a Singleton for this.
- */
     private AppDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         Log.d(TAG, "AppDatabase: constructor");

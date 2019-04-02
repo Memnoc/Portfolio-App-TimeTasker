@@ -11,12 +11,16 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"
+            android:label="@string/action_settings"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
+    <provider
+        android:name="com.smartdroidesign.timetasker.AppProvider"
+        android:authorities="com.smartdroidesign.timetasker.provider"
+        android:exported="false"/>
     </application>
-
 </manifest>
